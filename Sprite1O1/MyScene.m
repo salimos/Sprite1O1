@@ -87,7 +87,16 @@ static inline CGPoint rwNormalize(CGPoint a) {
     SKAction * actionMove = [SKAction moveTo:CGPointMake(-monster.size.width/2, actualY) duration:actualDuration];
     SKAction * actionMoveDone = [SKAction removeFromParent];
     
-    [monster runAction:[SKAction sequence:@[actionMove,actionMoveDone]]];
+    
+    
+    SKAction * loseAction = [SKAction runBlock:^{
+        SKTransition *reveal = [SKTransition flipHorizontalWithDuration:0.5];
+        SKScene * gameOverScene = [[GameOverScene alloc] initWithSize:self.size won:NO];
+        [self.view presentScene:gameOverScene transition: reveal];
+    }];
+    [monster runAction:[SKAction sequence:@[actionMove, loseAction, actionMoveDone]]];
+    
+    //[monster runAction:[SKAction sequence:@[actionMove,actionMoveDone]]];
 }
 
 - (void)updateWithTimeSinceLastUpdate:(CFTimeInterval)timeSinceLast {
@@ -162,6 +171,7 @@ static inline CGPoint rwNormalize(CGPoint a) {
     NSLog(@"fucking hit :]");
     [projectile removeFromParent];
     [monster removeFromParent];
+    [self updateScore];
     self.monstersDestroyed++;
     if (self.monstersDestroyed > 30) {
         SKTransition *reveal = [SKTransition flipHorizontalWithDuration:0.5];
