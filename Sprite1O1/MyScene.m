@@ -6,8 +6,11 @@
 //  Copyright (c) 2013 Slim Khan. All rights reserved.
 //
 
+
 #import "MyScene.h"
 
+static const uint32_t projectileCategory     =  0x1 << 0;
+static const uint32_t monsterCategory        =  0x1 << 1;
 
 // I am not sure if we need this, but too scared to delete.
 static inline CGPoint rwAdd(CGPoint a, CGPoint b) {
@@ -40,8 +43,14 @@ static inline CGPoint rwNormalize(CGPoint a) {
         self.backgroundColor = [SKColor colorWithRed:1.0 green:1 blue:1.0 alpha:1.0];
         
         self.player = [SKSpriteNode spriteNodeWithImageNamed:@"player"];
+        
+        //GameEngine Fucking shit
+        self.physicsWorld.gravity = CGVectorMake(0,0);
+        self.physicsWorld.contactDelegate = self;
+        
         self.player.position = CGPointMake(self.player.size.width/2, self.frame.size.height/2);
         [self addChild:self.player];
+
         
     }
     return self;
@@ -49,6 +58,14 @@ static inline CGPoint rwNormalize(CGPoint a) {
 
 -(void)addMonster {
     SKSpriteNode * monster = [SKSpriteNode spriteNodeWithImageNamed:@"monster"];
+    
+    
+    //Game engine SHiT
+    monster.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:monster.size];
+    monster.physicsBody.dynamic = YES; // le Game engin ne controle po les déplacement du monstre ( on a déjà move)
+    monster.physicsBody.categoryBitMask = monsterCategory;
+    monster.physicsBody.contactTestBitMask = projectileCategory;
+    monster.physicsBody.collisionBitMask = 0;
     
     
     int minY = monster.size.height / 2;
@@ -96,11 +113,24 @@ static inline CGPoint rwNormalize(CGPoint a) {
 //Move on and call me an idiot later.
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
     
+    
+    //Play shit :D
+    [self runAction:[SKAction playSoundFileNamed:@"pew-pew-lei.caf" waitForCompletion:NO]];
+
+    
     UITouch * touch = [touches anyObject];
     CGPoint location = [touch locationInNode:self];
     
     SKSpriteNode *projectile = [SKSpriteNode spriteNodeWithImageNamed:@"projectile"];
     projectile.position = self.player.position;
+    
+    //L'ajout du game engine
+    projectile.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:projectile.size.width/2];
+    projectile.physicsBody.dynamic = YES;
+    projectile.physicsBody.categoryBitMask = projectileCategory;
+    projectile.physicsBody.contactTestBitMask = monsterCategory;
+    projectile.physicsBody.collisionBitMask = 0;
+    projectile.physicsBody.usesPreciseCollisionDetection = YES;
     
     CGPoint offset = rwSub(location, projectile.position);
     
@@ -122,6 +152,50 @@ static inline CGPoint rwNormalize(CGPoint a) {
     
     
 }
+
+
+-(void)projectile:(SKSpriteNode * )projectile didCollideWithMonster:(SKSpriteNode * )monster{
+    NSLog(@"fucking hit :]");
+    [projectile removeFromParent];
+    [monster removeFromParent];
+}
+
+
+-(void)didBeginContact:(SKPhysicsContact*)contact{
+    SKPhysicsBody *firstBody, *secondBody;
+    
+    if (contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask) {
+        firstBody = contact.bodyA;
+        secondBody = contact.bodyB;
+    }else{
+        firstBody = contact.bodyB;
+        secondBody = contact.bodyA;
+    }
+    
+    
+    if ((firstBody.categoryBitMask & projectileCategory) != 0 && (secondBody.categoryBitMask & monsterCategory) != 0 ) {
+        [self projectile:(SKSpriteNode *) firstBody.node didCollideWithMonster:(SKSpriteNode *)secondBody.node];
+    }
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

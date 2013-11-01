@@ -9,6 +9,10 @@
 #import <UIKit/UIKit.h>
 #import <SpriteKit/SpriteKit.h>
 
-@interface ViewController : UIViewController
+//For music shit !
+@import AVFoundation;
 
+
+@interface ViewController : UIViewController
+@property (nonatomic) AVAudioPlayer * backgroundMusicPlayer;
 @end
