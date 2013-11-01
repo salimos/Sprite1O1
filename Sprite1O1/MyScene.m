@@ -9,20 +9,36 @@
 #import "MyScene.h"
 
 
+// I am not sure if we need this, but too scared to delete.
+static inline CGPoint rwAdd(CGPoint a, CGPoint b) {
+    return CGPointMake(a.x + b.x, a.y + b.y);
+}
 
+static inline CGPoint rwSub(CGPoint a, CGPoint b) {
+    return CGPointMake(a.x - b.x, a.y - b.y);
+}
+
+static inline CGPoint rwMult(CGPoint a, float b) {
+    return CGPointMake(a.x * b, a.y * b);
+}
+
+static inline float rwLength(CGPoint a) {
+    return sqrtf(a.x * a.x + a.y * a.y);
+}
+
+// Makes a vector have a length of 1
+static inline CGPoint rwNormalize(CGPoint a) {
+    float length = rwLength(a);
+    return CGPointMake(a.x / length, a.y / length);
+}
 
 @implementation MyScene
 
 -(id)initWithSize:(CGSize)size {
     if (self = [super initWithSize:size]) {
         
-        // 2
-        NSLog(@"Size: %@", NSStringFromCGSize(size));
-        
-        // 3
         self.backgroundColor = [SKColor colorWithRed:1.0 green:1 blue:1.0 alpha:1.0];
         
-        // 4
         self.player = [SKSpriteNode spriteNodeWithImageNamed:@"player"];
         self.player.position = CGPointMake(self.player.size.width/2, self.frame.size.height/2);
         [self addChild:self.player];
@@ -60,7 +76,6 @@
     if (self.lastSpawnTimeInterval > 1) {
         self.lastSpawnTimeInterval = 0;
         [self addMonster];
-        //NSLog(@"A new monster just added");
     }
 }
 
@@ -76,5 +91,41 @@
     
     [self updateWithTimeSinceLastUpdate:timeSinceLast];
 }
+
+//This code sucks, you know it and I know it.
+//Move on and call me an idiot later.
+-(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
+    
+    UITouch * touch = [touches anyObject];
+    CGPoint location = [touch locationInNode:self];
+    
+    SKSpriteNode *projectile = [SKSpriteNode spriteNodeWithImageNamed:@"projectile"];
+    projectile.position = self.player.position;
+    
+    CGPoint offset = rwSub(location, projectile.position);
+    
+    if (offset.x <= 0) return;
+    
+    [self addChild:projectile];
+    CGPoint direction = rwNormalize(offset);
+    CGPoint shootAmount = rwMult(direction, 1000);
+    CGPoint realDest = rwAdd(shootAmount, projectile.position);
+    
+    
+    // I am not sure if we need this, but too scared to delete.
+    float velocity = 480.0/1.0;
+    float realmoveduration = self.size.width/velocity;
+    
+    SKAction * actionMove = [SKAction moveTo:realDest duration:realmoveduration];
+    SKAction * actionMoveDone = [SKAction removeFromParent];
+    [projectile runAction:[SKAction sequence:@[actionMove,actionMoveDone]]];
+    
+    
+}
+
+
+
+
+
 
 @end
