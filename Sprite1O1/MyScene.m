@@ -54,9 +54,24 @@ static inline CGPoint rwNormalize(CGPoint a) {
         [self addChild:self.player];
         
         
+        //Ajout l'affichage du score :3
+        self.score = [SKLabelNode labelNodeWithFontNamed:@"Zapfino" ];
+        self.score.fontColor = [SKColor blackColor];
+        self.score.fontSize = 12;
+        self.score.text =  [NSString stringWithFormat:@"Monstres tués : %i",_monstersDestroyed];
+        self.score.position = CGPointMake(self.scene.size.width -  self.score.frame.size.width ,
+                                      self.scene.size.height - (self.score.frame.size.height*2));
+        [self addChild:self.score];
+        
+        
         
     }
     return self;
+}
+
+-(void)updateScore{
+    //Update du score :3 
+    _score.text =  [NSString stringWithFormat:@"Monstres tués : %i",_monstersDestroyed];
 }
 
 -(void)addMonster {

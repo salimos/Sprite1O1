@@ -11,6 +11,7 @@
 @interface MyScene : SKScene <SKPhysicsContactDelegate> 
 
 @property (nonatomic) SKSpriteNode * player;
+@property (nonatomic) SKLabelNode * score;
 @property (nonatomic) NSTimeInterval lastSpawnTimeInterval;
 @property (nonatomic) NSTimeInterval lastUpdateTimeInterval;
 @property (nonatomic) int monstersDestroyed;
