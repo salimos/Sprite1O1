@@ -8,6 +8,8 @@
 
 
 #import "MyScene.h"
+#import "GameOverScene.h"
+
 
 static const uint32_t projectileCategory     =  0x1 << 0;
 static const uint32_t monsterCategory        =  0x1 << 1;
@@ -50,7 +52,8 @@ static inline CGPoint rwNormalize(CGPoint a) {
         
         self.player.position = CGPointMake(self.player.size.width/2, self.frame.size.height/2);
         [self addChild:self.player];
-
+        
+        
         
     }
     return self;
@@ -93,6 +96,7 @@ static inline CGPoint rwNormalize(CGPoint a) {
     if (self.lastSpawnTimeInterval > 1) {
         self.lastSpawnTimeInterval = 0;
         [self addMonster];
+        
     }
 }
 
@@ -158,6 +162,12 @@ static inline CGPoint rwNormalize(CGPoint a) {
     NSLog(@"fucking hit :]");
     [projectile removeFromParent];
     [monster removeFromParent];
+    self.monstersDestroyed++;
+    if (self.monstersDestroyed > 30) {
+        SKTransition *reveal = [SKTransition flipHorizontalWithDuration:0.5];
+        SKScene * gameOverScene = [[GameOverScene alloc] initWithSize:self.size won:YES];
+        [self.view presentScene:gameOverScene transition: reveal];
+    }
 }
 
 

@@ -31,6 +31,7 @@
 		9348D98C18228C89007EE116 /* projectile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9348D98318228C88007EE116 /* projectile@2x.png */; };
 		9348D98D18228C89007EE116 /* background-music-aac.caf in Resources */ = {isa = PBXBuildFile; fileRef = 9348D98518228C88007EE116 /* background-music-aac.caf */; };
 		9348D98E18228C89007EE116 /* pew-pew-lei.caf in Resources */ = {isa = PBXBuildFile; fileRef = 9348D98618228C88007EE116 /* pew-pew-lei.caf */; };
+		9348D99718233215007EE116 /* GameOverScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 9348D99618233215007EE116 /* GameOverScene.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +75,8 @@
 		9348D98318228C88007EE116 /* projectile@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "projectile@2x.png"; sourceTree = "<group>"; };
 		9348D98518228C88007EE116 /* background-music-aac.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "background-music-aac.caf"; sourceTree = "<group>"; };
 		9348D98618228C88007EE116 /* pew-pew-lei.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "pew-pew-lei.caf"; sourceTree = "<group>"; };
+		9348D99518233215007EE116 /* GameOverScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameOverScene.h; sourceTree = "<group>"; };
+		9348D99618233215007EE116 /* GameOverScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameOverScene.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +138,8 @@
 		9348D9481822884D007EE116 /* Sprite1O1 */ = {
 			isa = PBXGroup;
 			children = (
+				9348D99518233215007EE116 /* GameOverScene.h */,
+				9348D99618233215007EE116 /* GameOverScene.m */,
 				9348D9511822884D007EE116 /* AppDelegate.h */,
 				9348D9521822884D007EE116 /* AppDelegate.m */,
 				9348D9541822884D007EE116 /* Main.storyboard */,
@@ -314,6 +319,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9348D99718233215007EE116 /* GameOverScene.m in Sources */,
 				9348D95C1822884E007EE116 /* MyScene.m in Sources */,
 				9348D9591822884E007EE116 /* ViewController.m in Sources */,
 				9348D9531822884D007EE116 /* AppDelegate.m in Sources */,
